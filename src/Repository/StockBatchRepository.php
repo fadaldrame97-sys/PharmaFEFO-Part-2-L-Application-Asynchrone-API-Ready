@@ -72,6 +72,35 @@ class StockBatchRepository {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['total_perdu'] ? (int)$result['total_perdu'] : 0;
     }
+
+    public function decreaseQuantity(int $batchId, int $qty): bool
+{
+    $sql = "UPDATE stock_batches
+            SET quantity = quantity - :qty
+            WHERE id = :id";
+
+    $stmt = $this->db->prepare($sql);
+
+    return $stmt->execute([
+        'qty' => $qty,
+        'id' => $batchId
+    ]);
+     }
+
+
+     public function updateStatus(int $batchId, string $status): bool
+{
+    $sql = "UPDATE stock_batches
+            SET status = :status
+            WHERE id = :id";
+
+    $stmt = $this->db->prepare($sql);
+
+    return $stmt->execute([
+        'status' => $status,
+        'id' => $batchId
+    ]);
+}
   
 
 }
