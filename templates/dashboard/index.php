@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <!-- HTML seulement -->
+   
 <body>
 
 <h1>PharmaFEFO</h1>
