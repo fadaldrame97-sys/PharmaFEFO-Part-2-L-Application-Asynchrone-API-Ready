@@ -1,0 +1,87 @@
+<?php
+
+namespace PharmaFEFO\Service;
+
+use PharmaFEFO\Repository\StockBatchRepository;
+
+class StockService
+{
+    private StockBatchRepository $repository;
+
+    public function __construct()
+    {
+        $this->repository = new StockBatchRepository();
+    }
+
+    // 📦 1. Tous les lots (FEFO)
+    public function getAllBatches(): array
+    {
+        return $this->repository->findAllFEFO();
+    }
+
+    
+    public function getPriorityBatch(int $productId): ?array
+    {
+        return $this->repository->getPriorityBatch($productId);
+    }
+
+   
+    public function checkout(int $productId, int $qty = 1): array
+    {
+        $batch = $this->repository->getPriorityBatch($productId);
+
+        if (!$batch) {
+            return [
+                "success" => false,
+                "message" => "Aucun lot disponible"
+            ];
+        }
+
+        if ($batch['quantity'] < $qty) {
+            return [
+                "success" => false,
+                "message" => "Stock insuffisant"
+            ];
+        }
+
+        $this->repository->decreaseQuantity($batch['id'], $qty);
+
+        // si stock = 0 → optionnel status
+        if (($batch['quantity'] - $qty) <= 0) {
+            $this->repository->updateStatus($batch['id'], "EMPTY");
+        }
+
+        return [
+            "success" => true,
+            "message" => "Produit délivré (FEFO appliqué)",
+            "batch_id" => $batch['id']
+        ];
+    }
+
+   
+    public function expireBatch(int $batchId): array
+    {
+        $this->repository->markAsExpired($batchId);
+
+        return [
+            "success" => true,
+            "message" => "Lot marqué comme EXPIRED"
+        ];
+    }
+
+    public function getCriticalBatches(): array
+    {
+        $batches = $this->repository->findAllFEFO();
+
+        return array_filter($batches, function ($batch) {
+            $daysLeft = (strtotime($batch['expiration_date']) - time()) / 86400;
+            return $daysLeft <= 30 && $batch['status'] !== 'EXPIRED';
+        });
+    }
+
+   
+    public function getTotalLoss(): int
+    {
+        return $this->repository->getTotalPertesBoites();
+    }
+}
