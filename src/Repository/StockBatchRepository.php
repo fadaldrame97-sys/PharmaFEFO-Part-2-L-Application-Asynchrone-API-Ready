@@ -12,9 +12,7 @@ class StockBatchRepository {
         $this->db = Database::getConnection();
     }
 
-    /**
-     * Épic 2 : Tri par FEFO exact (Expiration la plus proche en premier)
-     */
+   
     public function findAllFEFO(): array {
         $sql = "SELECT sb.*, p.name as product_name, p.code as product_code 
                 FROM stock_batches sb
