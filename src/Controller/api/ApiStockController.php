@@ -14,5 +14,7 @@ class ApiStockController
 
     public function index():void {
         header('content-Type: application/json');
+
+        $data=$this->stockService->getAllBatches();
     }
 }
