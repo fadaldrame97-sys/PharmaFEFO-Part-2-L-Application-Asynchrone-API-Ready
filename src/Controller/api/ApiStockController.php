@@ -16,5 +16,7 @@ class ApiStockController
         header('content-Type: application/json');
 
         $data=$this->stockService->getAllBatches();
+
+        echo json_encode(["status"=>200,"data"=>$data]);
     }
 }
