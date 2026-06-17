@@ -19,4 +19,14 @@ class ApiStockController
 
         echo json_encode(["status"=>200,"data"=>$data]);
     }
+
+
+    public function checkout(): void
+    {
+        header('Content-Type: application/json');
+
+        $input = json_decode(file_get_contents("php://input"), true);
+
+        $productId = $input['product_id'] ?? null;
+    }
 }
