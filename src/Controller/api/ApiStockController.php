@@ -28,5 +28,18 @@ class ApiStockController
         $input = json_decode(file_get_contents("php://input"), true);
 
         $productId = $input['product_id'] ?? null;
+
+            if (!$productId) {
+                http_response_code(400);
+                echo json_encode([ "status" => 400,"message" => "product_id requis" ]);
+            return;  }
+            $result = $this->stockService->checkout($productId);
+
+            if (!$result['success']) {
+                http_response_code(400);
+                echo json_encode($result);
+            return;
+        }
+
     }
 }
