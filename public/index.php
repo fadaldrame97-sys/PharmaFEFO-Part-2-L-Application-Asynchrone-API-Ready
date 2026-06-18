@@ -13,7 +13,7 @@ use PharmaFEFO\Controller\Web\DashboardController;
 $Apicontroller = new ApiStockController();
 $dashboardWebcontr = new DashboardController();
 
-$apiAction = $_GET['action'];
+$apiAction = $_GET['action']?? null;
 $route = $_GET['route'] ?? '';
 if ($route === 'api'){
     switch ($apiAction) {
