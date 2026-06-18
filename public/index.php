@@ -5,24 +5,39 @@ require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../src/Repository/StockBatchRepository.php';
 require_once __DIR__ . '/../src/Service/StockService.php';
 require_once __DIR__ . '/../src/Controller/Api/ApiStockController.php';
+require_once __DIR__ . '/../src/Controller/web/DashboardController.php';
 
 use PharmaFEFO\Controller\Api\ApiStockController;
+use PharmaFEFO\Controller\Web\DashboardController;
 
-$controller = new ApiStockController();
+$Apicontroller = new ApiStockController();
+$dashboardWebcontr = new DashboardController();
 
-
+$apiAction = $_GET['action'];
 $route = $_GET['route'] ?? '';
-
-switch ($route) {
-    case 'api/stocks':
-        $controller->index();
+if ($route === 'api'){
+    switch ($apiAction) {
+    case 'stocks':
+        $Apicontroller->index();
         break;
 
-    case 'api/stocks/critical':
-        $controller->critical();
+    case 'stocks/critical':
+        $Apicontroller->critical();
         break;
 
-    case 'api/stocks/checkout':
-        $controller->checkout();
+    case 'stocks/checkout':
+        $Apicontroller->checkout();
         break;
 }
+}
+
+    switch ($route) {
+    case 'dashboard':
+        $dashboardWebcontr->index();
+        break;
+}
+
+
+
+
+

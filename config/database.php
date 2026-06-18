@@ -8,11 +8,11 @@ class Database {
         if (self::$connection === null) {
             try {
                 $host = 'localhost';
-                $dbname = 'pharmafefo';
+                $dbname = 'PharmaFEFO';
                 $username = 'root';
                 $password = ''; 
 
-                self::$connection = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+                self::$connection = new PDO("mysql:host=$host;dbname=PharmaFEFO;charset=utf8", $username, $password);
                 
                
                 self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
