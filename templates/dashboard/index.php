@@ -32,7 +32,7 @@
 </table>
 
 
-<script src="js/dashboard.js"></script>
+<script src="../../public/js/dashboard.js"></script>
 </body>
 </body>
 </html>

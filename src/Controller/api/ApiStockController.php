@@ -16,8 +16,10 @@ class ApiStockController
         header('content-Type: application/json');
 
         $data=$this->stockService->getAllBatches();
+         
 
         echo json_encode(["status"=>200,"data"=>$data]);
+       
     }
 
 
@@ -45,7 +47,7 @@ class ApiStockController
 
 
     public function critical(): void {
-        
+
        header('Content-Type: application/json');
 
        $data = $this->stockService->getCriticalBatches();

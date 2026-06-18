@@ -1,20 +1,28 @@
 <?php
 
-require_once __DIR__ . '/../src/Controller/Web/DashboardController.php';
+require_once __DIR__ . '/../config/database.php';
+
+require_once __DIR__ . '/../src/Repository/StockBatchRepository.php';
+require_once __DIR__ . '/../src/Service/StockService.php';
 require_once __DIR__ . '/../src/Controller/Api/ApiStockController.php';
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+use PharmaFEFO\Controller\Api\ApiStockController;
 
-if ($uri === '/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/' || $uri === '/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/index.php') {
+$controller = new ApiStockController();
 
-    $controller = new \PharmaFEFO\Controller\Web\DashboardController();
-    $controller->index();
-    exit;
-}
 
-if ($uri === '/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/api/v1/batches') {
+$route = $_GET['route'] ?? '';
 
-    $controller = new \PharmaFEFO\Controller\Api\ApiStockController();
-    $controller->index();
-    exit;
+switch ($route) {
+    case 'api/stocks':
+        $controller->index();
+        break;
+
+    case 'api/stocks/critical':
+        $controller->critical();
+        break;
+
+    case 'api/stocks/checkout':
+        $controller->checkout();
+        break;
 }
