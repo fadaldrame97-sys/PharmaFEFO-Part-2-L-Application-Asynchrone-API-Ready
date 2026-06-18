@@ -32,7 +32,7 @@
 </table>
 
 
-<script src="/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/js/dashboard.js"></script>
+<script src="js/dashboard.js"></script>
 </body>
 </body>
 </html>
