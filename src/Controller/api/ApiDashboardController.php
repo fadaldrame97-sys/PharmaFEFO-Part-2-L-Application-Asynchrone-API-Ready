@@ -10,4 +10,7 @@ class ApiDashboardController{
     {
          $this->stockService= new StockService();
     }
+    public function index():void {
+        header('content-Type: application/json');
+    }
 }
