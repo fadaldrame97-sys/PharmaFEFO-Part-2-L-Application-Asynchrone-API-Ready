@@ -11,7 +11,7 @@ class ApiDashboardController{
          $this->stockService= new StockService();
     }
     public function index():void {
-        header('content-Type: application/json');
+        header('Content-Type: application/json');
 
         $critic=$this->stockService->getCriticalBatches();
         $loss=$this->stockService->getTotalLoss();
