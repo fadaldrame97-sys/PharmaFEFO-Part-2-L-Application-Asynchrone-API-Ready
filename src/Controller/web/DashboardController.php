@@ -1,12 +1,14 @@
 <?php
 
 namespace PharmaFEFO\Controller\Web;
+use PharmaFEFO\Middleware\AuthMiddleware;
 
 class DashboardController
+
 {
     public function index(): void
     {
-        
+          AuthMiddleware::check(['ADMIN', 'PHARMACIEN']);
         //if (session_status() === PHP_SESSION_NONE) {
             //session_start();
        // }

@@ -1,5 +1,22 @@
 <?php
-
 namespace PharmaFEFO\Controller\Api;
 
 use PharmaFEFO\Service\StockService;
+
+class ApiDashboardController{
+    private StockService $stockService;
+
+    public function __construct()
+    {
+         $this->stockService= new StockService();
+    }
+    public function index():void {
+        header('Content-Type: application/json');
+
+        $critic=$this->stockService->getCriticalBatches();
+        $loss=$this->stockService->getTotalLoss();
+        
+        echo json_encode(["status" => 200,"data" => ["CriticalBatches"=>count($critic), "TotalLoss"=>$loss]]);
+
+    }
+}

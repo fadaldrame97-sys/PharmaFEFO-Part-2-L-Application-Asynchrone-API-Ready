@@ -2,42 +2,81 @@
 
 require_once __DIR__ . '/../config/database.php';
 
+require_once __DIR__ . '/../src/Middleware/AuthMiddleware.php';
 require_once __DIR__ . '/../src/Repository/StockBatchRepository.php';
 require_once __DIR__ . '/../src/Service/StockService.php';
+require_once __DIR__ . '/../src/Repository/UserRepository.php';
+require_once __DIR__ . '/../src/Service/AuthService.php';
+require_once __DIR__ . '/../src/Entity/User.php';
+
+
 require_once __DIR__ . '/../src/Controller/Api/ApiStockController.php';
-require_once __DIR__ . '/../src/Controller/web/DashboardController.php';
+require_once __DIR__ . '/../src/Controller/Api/ApiDashboardController.php';
 
-use PharmaFEFO\Controller\Api\ApiStockController;
-use PharmaFEFO\Controller\Web\DashboardController;
+require_once __DIR__ . '/../src/Controller/Web/DashboardController.php';
+require_once __DIR__ . '/../src/Controller/Web/StockController.php';
+require_once __DIR__ . '/../src/Controller/Web/AuthController.php';
 
-$Apicontroller = new ApiStockController();
-$dashboardWebcontr = new DashboardController();
+use PharmaFEFO\Controller\api\ApiStockController;
+use PharmaFEFO\Controller\api\ApiDashboardController;
 
-$apiAction = $_GET['action']?? null;
+use PharmaFEFO\Controller\web\DashboardController;
+use PharmaFEFO\Controller\web\StockController;
+use PharmaFEFO\Controller\web\AuthController;
+
+session_start();
+
+
+$apiStock = new ApiStockController();
+$apiDashboard = new ApiDashboardController();
+
+$dashboard = new DashboardController();
+$stock = new StockController();
+$auth = new AuthController();
+
+
 $route = $_GET['route'] ?? '';
-if ($route === 'api'){
-    switch ($apiAction) {
-    case 'stocks':
-        $Apicontroller->index();
+
+
+switch ($route) {
+
+    case 'login':
+        $auth->showLogin();
         break;
 
-    case 'stocks/critical':
-        $Apicontroller->critical();
+    case 'login/store':
+        $auth->login();
         break;
 
-    case 'stocks/checkout':
-        $Apicontroller->checkout();
+    case 'logout':
+        $auth->logout();
         break;
-}
-}
 
-    switch ($route) {
     case 'dashboard':
-        $dashboardWebcontr->index();
+        $dashboard->index();
+        break;
+
+    case 'stock':
+        $stock->index();
+        break;
+
+    case 'api/stocks':
+        $apiStock->index();
+        break;
+
+    case 'api/stocks/critical':
+        $apiStock->critical();
+        break;
+
+    case 'api/stocks/checkout':
+        $apiStock->checkout();
+        break;
+
+    case 'api/dashboard':
+        $apiDashboard->index();
+        break;
+
+    default:
+        echo "404 - Route introuvable";
         break;
 }
-
-
-
-
-
