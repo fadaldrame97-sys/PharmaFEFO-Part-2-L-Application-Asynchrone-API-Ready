@@ -16,7 +16,7 @@ class ApiDashboardController{
         $critic=$this->stockService->getCriticalBatches();
         $loss=$this->stockService->getTotalLoss();
         
-        echo json_encode(["CriticalBatches"=>count($critic), "TotalLoss"=>$loss]);
+        echo json_encode(["status" => 200,"data" => ["CriticalBatches"=>count($critic), "TotalLoss"=>$loss]]);
 
     }
 }
