@@ -14,5 +14,6 @@ class ApiDashboardController{
         header('content-Type: application/json');
 
         $critic=$this->stockService->getCriticalBatches();
+        $loss=$this->stockService->getTotalLoss();
     }
 }
