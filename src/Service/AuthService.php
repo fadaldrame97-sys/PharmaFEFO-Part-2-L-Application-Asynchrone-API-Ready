@@ -21,9 +21,9 @@ public function login(string $email, string $password): ?User {
         return null;
     }
 
-    if (!password_verify($password, $user->getPassword())) {
-        return null;
-    }
+   if ($password !== $user->getPassword()) {
+    return null;
+}
 
     return $user; // objet User
 }

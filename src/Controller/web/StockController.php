@@ -1,7 +1,10 @@
 <?php
-namespace PharmaFEFO\Controller\Web;
+namespace PharmaFEFO\Controller\web;
 
 use PharmaFEFO\Middleware\AuthMiddleware;
+
+
+
 
 class StockController {
     public function index(): void {

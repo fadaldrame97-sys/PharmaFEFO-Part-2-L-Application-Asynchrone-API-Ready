@@ -1,6 +1,6 @@
 <?php
 
-namespace PharmaFEFO\Controller\Api;
+namespace PharmaFEFO\Controller\api;
 
 use PharmaFEFO\Service\StockService;
 use PharmaFEFO\Middleware\AuthMiddleware;
