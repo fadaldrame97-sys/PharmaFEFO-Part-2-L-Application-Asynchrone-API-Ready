@@ -3,6 +3,7 @@
 namespace PharmaFEFO\Service;
 
 use PharmaFEFO\Repository\UserRepository;
+use PharmaFEFO\Entity\User; 
 
 class AuthService
 {
@@ -13,18 +14,18 @@ class AuthService
         $this->userRepository = new UserRepository();
     }
 
-    public function login(string $email, string $password): array|false
-    {
-        $user = $this->userRepository->findByEmail($email);
+public function login(string $email, string $password): ?User {
+    $user = $this->userRepository->findByEmail($email);
 
-        if (!$user) {
-            return false;
-        }
-
-        if (!password_verify($password, $user['password'])) {
-            return false;
-        }
-
-        return $user;
+    if (!$user) {
+        return null;
     }
+
+    if (!password_verify($password, $user->getPassword())) {
+        return null;
+    }
+
+    return $user; // objet User
+}
+
 }

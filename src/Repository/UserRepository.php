@@ -4,6 +4,7 @@ namespace PharmaFEFO\Repository;
 
 use PDO;
 use Database;
+use PharmaFEFO\Entity\User;
 
 class UserRepository
 {
@@ -14,14 +15,19 @@ class UserRepository
         $this->pdo = Database::getConnection();
     }
 
-    public function findByEmail(string $email): ?array
-    {
-        $sql = "SELECT * FROM users WHERE email = :email";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['email' => $email]);
+public function findByEmail(string $email): ?User {
+    $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+    $stmt->execute(['email' => $email]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$row) return null;
 
-        return $user ?: null;
-    }
+    return new User(
+        (int)$row['id'],
+        $row['email'],
+        $row['password'],
+        $row['role']
+    );
+}
+
 }
