@@ -20,9 +20,14 @@ class ApiStockController
 
         AuthMiddleware::check(['ADMIN', 'PHARMACIEN', 'PREPARATEUR']);
         header('Content-Type: application/json');
-
+         
+        $role = $_SESSION['user_role'] ?? null;
         $data = $this->stockService->getAllBatches();
-
+        
+        if ($role === 'PREPARATEUR') {
+        
+        $data = array_filter($data, fn($b) => $b['quantity'] > 0);
+        }
         echo json_encode([
             "status" => 200,
             "data" => $data
