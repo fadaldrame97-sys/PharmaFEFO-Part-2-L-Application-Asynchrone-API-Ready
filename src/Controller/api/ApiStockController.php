@@ -18,16 +18,24 @@ class ApiStockController
 
     {
 
+       //if (session_status() === PHP_SESSION_NONE) {
+       // session_start();
+       //}
+
         AuthMiddleware::check(['ADMIN', 'PHARMACIEN', 'PREPARATEUR']);
         header('Content-Type: application/json');
          
         $role = $_SESSION['user_role'] ?? null;
         $data = $this->stockService->getAllBatches();
-        
-        if ($role === 'PREPARATEUR') {
-        
-        $data = array_filter($data, fn($b) => $b['quantity'] > 0);
-        }
+
+        //var_dump($role);
+        //var_dump($data);
+         //exit;
+    if ($role === 'PREPARATEUR') {
+    $data = array_values(array_filter($data, function ($b) {
+        return !empty($b['quantity']) && (int)$b['quantity'] > 0;
+    }));
+}
         echo json_encode([
             "status" => 200,
             "data" => $data
