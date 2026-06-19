@@ -12,5 +12,7 @@ class ApiDashboardController{
     }
     public function index():void {
         header('content-Type: application/json');
+
+        $critic=$this->stockService->getCriticalBatches();
     }
 }
