@@ -1,6 +1,6 @@
 <?php
 
-namespace PharmaFEFO\Controller\Web;
+namespace PharmaFEFO\Controller\web;
 use PharmaFEFO\Middleware\AuthMiddleware;
 
 
@@ -21,4 +21,6 @@ class AdminController
 
         require __DIR__ . '/../../../templates/admin/reports.php';
     }
+
+    
 }

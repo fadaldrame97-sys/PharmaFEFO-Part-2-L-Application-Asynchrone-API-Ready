@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PharmaFEFO Dashboard</title>
 
-    <!-- Tailwind CDN -->
+  
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
+<?php require __DIR__ . '/../layout/base.php'; ?>
 
 <body class="bg-gray-100 min-h-screen">
 
@@ -52,6 +54,21 @@
             </div>
 
         </div>
+
+
+        <div id="stats" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"></div>
+
+   
+    <div class="flex gap-2 mb-4">
+    <button onclick="loadBatches('all')" class="bg-gray-500 text-white px-3 py-1 rounded">
+        Tout
+    </button>
+
+    <button onclick="loadBatches('critical')" class="bg-red-500 text-white px-3 py-1 rounded">
+        Alerte Rouge
+    </button>
+</div>
+
     </main>
 
     <script src="/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/js/dashboard.js"></script>
