@@ -13,25 +13,20 @@ class StockService
         $this->repository = new StockBatchRepository();
     }
 
-    
     public function getAllBatches(): array
     {
         return $this->repository->findAllFEFO();
     }
 
-    
     public function getPriorityBatch(int $productId): ?array
     {
         return $this->repository->getPriorityBatch($productId);
     }
 
-   
     public function checkout(int $productId, int $qty = 1): array
     {
         $batch = $this->repository->getPriorityBatch($productId);
 
-        var_dump($batch['id']);
-        
         if (!$batch) {
             return [
                 "success" => false,
@@ -48,7 +43,7 @@ class StockService
 
         $this->repository->decreaseQuantity($batch['id'], $qty);
 
-        // si stock = 0 → optionnel status
+        // FEFO rule: si stock = 0 → statut EMPTY
         if (($batch['quantity'] - $qty) <= 0) {
             $this->repository->updateStatus($batch['id'], "EMPTY");
         }
@@ -60,14 +55,14 @@ class StockService
         ];
     }
 
-   
     public function expireBatch(int $batchId): array
     {
         $this->repository->markAsExpired($batchId);
+        $this->repository->updateQuantity($batchId, 0);
 
         return [
             "success" => true,
-            "message" => "Lot marqué comme EXPIRED"
+            "message" => "Lot expiré"
         ];
     }
 
@@ -81,20 +76,18 @@ class StockService
         });
     }
 
-   
     public function getTotalLoss(): int
     {
         return $this->repository->getTotalPertesBoites();
     }
 
-
     public function addBatch(array $data): array
-{
-    return $this->repository->insertBatch([
-        'product_id' => $data['product_id'],
-        'quantity' => $data['quantity'],
-        'expiration_date' => $data['expiration_date'],
-        'lot_number' => $data['lot_number'] ?? uniqid('LOT-')
-    ]);
-}
+    {
+        return $this->repository->insertBatch([
+            'product_id' => $data['product_id'],
+            'quantity' => $data['quantity'],
+            'expiration_date' => $data['expiration_date'],
+            'lot_number' => $data['lot_number'] ?? uniqid('LOT-')
+        ]);
+    }
 }

@@ -113,6 +113,20 @@ public function insertBatch(array $data): array
         "message" => "inserted"
     ];
 }
+
+public function updateQuantity(int $batchId, int $newQuantity): bool
+{
+    $stmt = $this->pdo->prepare("
+        UPDATE stock_batches
+        SET quantity = :qty
+        WHERE id = :id
+    ");
+
+    return $stmt->execute([
+        'qty' => $newQuantity,
+        'id' => $batchId
+    ]);
+}
   
 
 }
