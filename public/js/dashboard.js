@@ -121,3 +121,46 @@ document.addEventListener("click", function (e) {
         checkout(productId);
     }
 });
+
+
+//Ecouter le button d'alert
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadBatches("all");
+    loadStats();
+});
+
+function loadBatches(criteria = "all") {
+    fetch(`/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/index.php?route=api/v1/batches&criteria=${criteria}`)
+        .then(res => res.json())
+        .then(data => {
+            renderTable(data.data);
+        });
+}
+
+
+
+//render le table
+
+function renderTable(batches) {
+    const tbody = document.getElementById("batch-table");
+    tbody.innerHTML = "";
+
+    batches.forEach(batch => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${batch.product_name}</td>
+            <td>${batch.quantity}</td>
+            <td>${batch.expiration_date}</td>
+            <td>
+                <span class="${getStatusClass(batch.status)} px-2 py-1 rounded">
+                    ${batch.status}
+                </span>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+    });
+}
