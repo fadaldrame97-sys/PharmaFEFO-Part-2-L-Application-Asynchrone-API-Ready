@@ -171,6 +171,12 @@ function renderTable(batches) {
                     class="btn-checkout bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
                     Délivrer
                 </button>
+
+                <button
+            data-id="${batch.id}"
+            class="btn-expire bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+            Périmé / À détruire
+            </button>
             </td>
         `;
 
