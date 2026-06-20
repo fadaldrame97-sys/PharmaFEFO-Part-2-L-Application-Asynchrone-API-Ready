@@ -176,4 +176,30 @@ public function filter(): void
         "data" => array_values($data)
     ]);
 }
+
+
+public function expire(): void
+{
+    AuthMiddleware::check(['PHARMACIEN']);
+
+    header('Content-Type: application/json');
+
+    $input = json_decode(file_get_contents("php://input"), true);
+    $batchId = $input['batch_id'] ?? null;
+
+    if (!$batchId) {
+        echo json_encode([
+            "success" => false,
+            "message" => "ID manquant"
+        ]);
+        return;
+    }
+
+    $this->stockService->expireBatch($batchId);
+
+    echo json_encode([
+        "success" => true,
+        "message" => "Lot supprimé (EXPIRED)"
+    ]);
+}
 }
