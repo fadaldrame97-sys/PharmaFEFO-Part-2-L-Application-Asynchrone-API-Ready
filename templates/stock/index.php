@@ -6,6 +6,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
+<?php require __DIR__ . '/../layout/base.php'; ?>
+
 <body class="bg-gray-100 p-6">
 
 <h1 class="text-2xl font-bold mb-4"> Gestion Stock FEFO</h1>

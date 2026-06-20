@@ -9,6 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
+<?php require __DIR__ . '/../layout/base.php'; ?>
+
 <body class="bg-gray-100 min-h-screen">
 
     <!-- Header -->
