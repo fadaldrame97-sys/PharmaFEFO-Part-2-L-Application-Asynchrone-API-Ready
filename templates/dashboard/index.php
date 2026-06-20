@@ -55,6 +55,9 @@
 
         </div>
 
+
+        <div id="stats" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"></div>
+
    
     <div class="flex gap-2 mb-4">
     <button onclick="loadBatches('all')" class="bg-gray-500 text-white px-3 py-1 rounded">

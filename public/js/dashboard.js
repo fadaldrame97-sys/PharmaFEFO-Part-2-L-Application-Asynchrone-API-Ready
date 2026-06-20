@@ -1,6 +1,11 @@
 console.log("JS CHARGÉ");
 console.log("🔥 dashboard.js chargé");
 
+document.addEventListener("DOMContentLoaded", () => {
+    loadBatches("all");
+    loadStats();
+});
+
 // API CALL
 fetch("/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/index.php?route=api/stocks")
     .then(response => response.json())
@@ -91,34 +96,29 @@ document.getElementById("add-batch-form").addEventListener("submit", function (e
 });
 
 //ajouter function checkout
-
 function checkout(productId) {
-    fetch("/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/index.php?route=api/stocks/checkout", {
+    fetch(`/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/index.php?route=api/stocks/checkout`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ product_id: productId })
+        body: JSON.stringify({ batch_id: batchId })
     })
     .then(res => res.json())
     .then(data => {
-        console.log("DÉLIVRANCE OK:", data);
-        alert("Lot délivré avec succès !");
-        // refresh table
-        loadStocks();
-    })
-    .catch(err => console.error("Erreur délivrance:", err));
-}
+        console.log("DÉLIVRÉ:", data);
+        alert("Produit délivré avec succès");
 
+        loadBatches("all"); // refresh correct
+    })
+    .catch(err => console.error("Erreur checkout:", err));
+}
 
 
 //le button délivrer
 document.addEventListener("click", function (e) {
-
-    if (e.target && e.target.classList.contains("btn-checkout")) {
-        const productId = e.target.dataset.id;
-
-        checkout(productId);
+    if (e.target.classList.contains("btn-checkout")) {
+        checkout(e.target.dataset.id);
     }
 });
 
@@ -131,12 +131,16 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function loadBatches(criteria = "all") {
-    fetch(`/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/index.php?route=api/v1/batches&criteria=${criteria}`)
+    fetch(`/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/index.php?route=api/stocks/filter&criteria=${criteria}`)
         .then(res => res.json())
         .then(data => {
             renderTable(data.data);
-        });
+        })
+        .catch(err => console.error("Erreur loadBatches:", err));
 }
+
+// IMPORTANT pour onclick HTML
+window.loadBatches = loadBatches;
 
 
 
@@ -148,6 +152,8 @@ function renderTable(batches) {
 
     batches.forEach(batch => {
 
+        const status = (batch.status || "").toUpperCase().trim();
+
         const row = document.createElement("tr");
 
         row.innerHTML = `
@@ -155,12 +161,33 @@ function renderTable(batches) {
             <td>${batch.quantity}</td>
             <td>${batch.expiration_date}</td>
             <td>
-                <span class="${getStatusClass(batch.status)} px-2 py-1 rounded">
-                    ${batch.status}
+                <span class="${getStatusClass(status)} px-2 py-1 rounded">
+                    ${status}
                 </span>
+            </td>
+            <td>
+                <button 
+                    data-id="${batch.product_id}" 
+                    class="btn-checkout bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                    Délivrer
+                </button>
             </td>
         `;
 
         tbody.appendChild(row);
     });
+}
+
+function loadStats() {
+    fetch(`/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/index.php?route=api/stocks/stats`)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("stats").innerHTML = `
+                <div class="bg-red-100 p-4 rounded">
+                    <h3 class="font-bold">Expire bientôt</h3>
+                    <p class="text-2xl">${data.count_expiring ?? 0}</p>
+                </div>
+            `;
+        })
+        .catch(err => console.error("Erreur stats:", err));
 }

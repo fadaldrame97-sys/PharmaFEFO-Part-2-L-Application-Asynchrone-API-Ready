@@ -47,9 +47,9 @@ class ApiStockController
         header('Content-Type: application/json');
 
         $input = json_decode(file_get_contents("php://input"), true);
-        $productId = $input['product_id'] ?? null;
+       $batchId = $input['batch_id'] ?? null;
 
-        if (!$productId) {
+        if (!$batchId) {
             http_response_code(400);
             echo json_encode([
                 "status" => 400,
@@ -58,7 +58,7 @@ class ApiStockController
             return;
         }
 
-        $result = $this->stockService->checkout($productId);
+        $result = $this->stockService->checkout($batchId);
 
         if (!$result['success']) {
             http_response_code(400);
@@ -151,6 +151,29 @@ public function stats(): void
     echo json_encode([
         "status" => 200,
         "count_expiring" => count($nextMonth)
+    ]);
+}
+
+
+public function filter(): void
+{
+    AuthMiddleware::check(['ADMIN', 'PHARMACIEN']);
+
+    header('Content-Type: application/json');
+
+    $criteria = $_GET['criteria'] ?? 'all';
+
+    $data = $this->stockService->getAllBatches();
+
+    if ($criteria === 'critical') {
+        $data = array_filter($data, function ($b) {
+            return in_array($b['status'], ['CRITICAL', 'EXPIRED', 'WARNING']);
+        });
+    }
+
+    echo json_encode([
+        "status" => 200,
+        "data" => array_values($data)
     ]);
 }
 }
