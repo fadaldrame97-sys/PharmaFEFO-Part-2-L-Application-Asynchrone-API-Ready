@@ -78,10 +78,18 @@ switch ($route) {
         $apiDashboard->index();
         break;
 
+    case 'api/v1/batches':
+    $apiStock->listByCriteria();
+    break;
+
+     case 'api/stocks/add':
+    $apiStock->add();
+    break;
+
+    
+
     default:
         echo "404 - Route introuvable";
         break;
-        case 'api/stocks/add':
-    $apiStock->add();
-    break;
+       
 }
