@@ -1,6 +1,8 @@
 <?php
 // src/Repository/StockBatchRepository.php
 namespace PharmaFEFO\Repository;
+use PharmaFEFO\Entity\StockBatch;
+
 
 use Database;
 use PDO;

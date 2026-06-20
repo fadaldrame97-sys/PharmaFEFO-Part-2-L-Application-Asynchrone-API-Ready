@@ -1,4 +1,5 @@
 console.log("JS CHARGÉ");
+console.log("🔥 dashboard.js chargé");
 
 // API CALL
 fetch("/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/index.php?route=api/stocks")
@@ -88,6 +89,28 @@ document.getElementById("add-batch-form").addEventListener("submit", function (e
     })
     .catch(err => console.error(err));
 });
+
+//ajouter function checkout
+
+function checkout(productId) {
+    fetch("/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/index.php?route=api/stocks/checkout", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ product_id: productId })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("DÉLIVRANCE OK:", data);
+        alert("Lot délivré avec succès !");
+        // refresh table
+        loadStocks();
+    })
+    .catch(err => console.error("Erreur délivrance:", err));
+}
+
+
 
 //le button délivrer
 document.addEventListener("click", function (e) {
