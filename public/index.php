@@ -79,4 +79,7 @@ switch ($route) {
     default:
         echo "404 - Route introuvable";
         break;
+        case 'api/stocks/add':
+    $apiStock->add();
+    break;
 }

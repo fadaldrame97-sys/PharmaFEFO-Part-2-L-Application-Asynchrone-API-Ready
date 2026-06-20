@@ -78,4 +78,31 @@ class ApiStockController
             "data" => $data
         ]);
     }
+
+
+    public function add(): void
+{
+    AuthMiddleware::check(['PREPARATEUR']);
+
+    header('Content-Type: application/json');
+
+    $input = json_decode(file_get_contents("php://input"), true);
+
+    if (!$input) {
+        http_response_code(400);
+        echo json_encode([
+            "status" => 400,
+            "message" => "Données invalides"
+        ]);
+        return;
+    }
+
+    $result = $this->stockService->addBatch($input);
+
+    echo json_encode([
+        "status" => 200,
+        "message" => "Lot ajouté avec succès",
+        "data" => $result
+    ]);
+}
 }

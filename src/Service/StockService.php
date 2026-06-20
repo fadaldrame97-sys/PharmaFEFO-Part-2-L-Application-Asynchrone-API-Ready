@@ -84,4 +84,15 @@ class StockService
     {
         return $this->repository->getTotalPertesBoites();
     }
+
+
+    public function addBatch(array $data): array
+{
+    return $this->repository->insertBatch([
+        'product_id' => $data['product_id'],
+        'quantity' => $data['quantity'],
+        'expiration_date' => $data['expiration_date'],
+        'lot_number' => $data['lot_number'] ?? uniqid('LOT-')
+    ]);
+}
 }

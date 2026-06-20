@@ -58,3 +58,32 @@ function getStatusClass(status) {
             return "bg-gray-100 text-gray-700";
     }
 }
+
+
+//form ajouter
+
+document.getElementById("add-batch-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    fetch("/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/index.php?route=api/stocks/add", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            product_id: document.getElementById("product_id").value,
+            quantity: document.getElementById("quantity").value,
+            expiration_date: document.getElementById("expiration_date").value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("AJOUT OK:", data);
+
+        alert("Lot ajouté avec succès");
+
+        // refresh table
+        loadStocks();
+    })
+    .catch(err => console.error(err));
+});
