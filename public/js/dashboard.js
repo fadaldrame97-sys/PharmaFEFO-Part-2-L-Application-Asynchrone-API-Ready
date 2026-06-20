@@ -197,3 +197,29 @@ function loadStats() {
         })
         .catch(err => console.error("Erreur stats:", err));
 }
+
+
+//effacer les produits primés
+
+document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("btn-expire")) {
+
+        const batchId = e.target.dataset.id;
+
+        fetch("/public/index.php?route=api/stocks/expire", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ batch_id: batchId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+
+               
+                e.target.closest("tr").remove();
+            }
+        });
+    }
+});
