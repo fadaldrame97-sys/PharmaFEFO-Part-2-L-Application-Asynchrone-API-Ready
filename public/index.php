@@ -85,7 +85,11 @@ switch ($route) {
      case 'api/stocks/add':
     $apiStock->add();
     break;
+    
 
+    case 'api/v1/stats':
+    $apiStock->stats();
+    break;
     
 
     default:

@@ -128,5 +128,29 @@ public function listByCriteria(): void
         "status" => 200,
         "data" => array_values($data)
     ]);
+
+
+}
+
+
+//les stats
+
+public function stats(): void
+{
+    AuthMiddleware::check(['ADMIN', 'PHARMACIEN']);
+
+    header('Content-Type: application/json');
+
+    $data = $this->stockService->getAllBatches();
+
+    $nextMonth = array_filter($data, function ($b) {
+        $daysLeft = (strtotime($b['expiration_date']) - time()) / 86400;
+        return $daysLeft <= 30 && $daysLeft > 0;
+    });
+
+    echo json_encode([
+        "status" => 200,
+        "count_expiring" => count($nextMonth)
+    ]);
 }
 }
