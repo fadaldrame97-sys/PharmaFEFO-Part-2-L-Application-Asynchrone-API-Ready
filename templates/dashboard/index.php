@@ -54,6 +54,18 @@
             </div>
 
         </div>
+
+   
+    <div class="flex gap-2 mb-4">
+    <button onclick="loadBatches('all')" class="bg-gray-500 text-white px-3 py-1 rounded">
+        Tout
+    </button>
+
+    <button onclick="loadBatches('critical')" class="bg-red-500 text-white px-3 py-1 rounded">
+        Alerte Rouge
+    </button>
+</div>
+
     </main>
 
     <script src="/PharmaFEFO-Part-2-L-Application-Asynchrone-API-Ready/public/js/dashboard.js"></script>
