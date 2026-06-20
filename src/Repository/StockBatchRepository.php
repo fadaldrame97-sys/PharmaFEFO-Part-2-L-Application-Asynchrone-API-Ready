@@ -39,20 +39,18 @@ class StockBatchRepository {
         ]);
     }
 
-   
-    public function getPriorityBatch(int $productId): ?array {
-        $sql = "SELECT sb.*, p.name as product_name 
-                FROM stock_batches sb
-                JOIN products p ON sb.product_id = p.id
-                WHERE sb.product_id = :product_id AND sb.quantity > 0 AND sb.status != 'EXPIRED'
-                ORDER BY sb.expiration_date ASC 
-                LIMIT 1";
-                
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['product_id' => $productId]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        return $result ?: null;
+   public function getPriorityBatch(int $productId): ?array
+{
+    $stmt = $this->pdo->prepare("
+        SELECT * FROM stock_batches
+        WHERE product_id = ?
+        AND quantity > 0
+        ORDER BY expiration_date ASC
+        LIMIT 1
+    ");
+
+    $stmt->execute([$productId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     
     
@@ -75,19 +73,16 @@ class StockBatchRepository {
         return $result['total_perdu'] ? (int)$result['total_perdu'] : 0;
     }
 
-    public function decreaseQuantity(int $batchId, int $qty): bool
+   public function decreaseQuantity(int $batchId, int $qty): void
 {
-    $sql = "UPDATE stock_batches
-            SET quantity = quantity - :qty
-            WHERE id = :id";
+    $stmt = $this->pdo->prepare("
+        UPDATE stock_batches
+        SET quantity = quantity - ?
+        WHERE id = ?
+    ");
 
-    $stmt = $this->pdo->prepare($sql);
-
-    return $stmt->execute([
-        'qty' => $qty,
-        'id' => $batchId
-    ]);
-     }
+    $stmt->execute([$qty, $batchId]);
+}
 
 
      public function updateStatus(int $batchId, string $status): bool

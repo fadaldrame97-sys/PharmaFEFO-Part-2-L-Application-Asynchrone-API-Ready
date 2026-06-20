@@ -13,7 +13,7 @@ class StockService
         $this->repository = new StockBatchRepository();
     }
 
-    // 📦 1. Tous les lots (FEFO)
+    
     public function getAllBatches(): array
     {
         return $this->repository->findAllFEFO();
@@ -30,6 +30,8 @@ class StockService
     {
         $batch = $this->repository->getPriorityBatch($productId);
 
+        var_dump($batch['id']);
+        
         if (!$batch) {
             return [
                 "success" => false,
