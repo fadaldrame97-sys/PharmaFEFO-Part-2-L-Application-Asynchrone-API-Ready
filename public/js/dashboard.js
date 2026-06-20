@@ -24,22 +24,23 @@ function displayBatches(batches) {
         const statusClass = getStatusClass(status);
 
         row.className = statusClass;
-
-        row.innerHTML = `
-            <td>${batch.product_name}</td>
-            <td>${batch.quantity}</td>
-            <td>${batch.expiration_date}</td>
-            <td>
-                <span class="px-2 py-1 rounded ${statusClass}">
-                    ${status}
-                </span>
-            </td>
-            <td>
-                <button data-id="${batch.product_id}">
-                    Délivrer
-                </button>
-            </td>
-        `;
+row.innerHTML = `
+    <td>${batch.product_name}</td>
+    <td>${batch.quantity}</td>
+    <td>${batch.expiration_date}</td>
+    <td>
+        <span class="px-2 py-1 rounded ${getStatusClass(batch.status)}">
+            ${batch.status}
+        </span>
+    </td>
+    <td>
+        <button 
+            data-id="${batch.product_id}" 
+            class="btn-checkout bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+            Délivrer
+        </button>
+    </td>
+`;
 
         tbody.appendChild(row);
     });
@@ -86,4 +87,14 @@ document.getElementById("add-batch-form").addEventListener("submit", function (e
         loadStocks();
     })
     .catch(err => console.error(err));
+});
+
+//le button délivrer
+document.addEventListener("click", function (e) {
+
+    if (e.target && e.target.classList.contains("btn-checkout")) {
+        const productId = e.target.dataset.id;
+
+        checkout(productId);
+    }
 });
