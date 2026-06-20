@@ -105,4 +105,28 @@ class ApiStockController
         "data" => $result
     ]);
 }
+
+
+public function listByCriteria(): void
+{
+    AuthMiddleware::check(['ADMIN', 'PHARMACIEN', 'PREPARATEUR']);
+
+    header('Content-Type: application/json');
+
+    $criteria = $_GET['criteria'] ?? 'all';
+
+    $data = $this->stockService->getAllBatches();
+
+    if ($criteria === 'critical') {
+        $data = array_filter($data, function ($b) {
+            $daysLeft = (strtotime($b['expiration_date']) - time()) / 86400;
+            return $daysLeft <= 30;
+        });
+    }
+
+    echo json_encode([
+        "status" => 200,
+        "data" => array_values($data)
+    ]);
+}
 }
